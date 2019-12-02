@@ -19,8 +19,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 typedef struct _win_border_struct {
-    chtype 	ls, rs, ts, bs,
-        tl, tr, bl, br;
+    chtype	tl;
 }WIN_BORDER;
 
 typedef struct _WIN_struct {
@@ -71,14 +70,6 @@ char *my_itoa(int nb);
 
 void help(void);
 void init_win_params(WIN *p_win);
-void print_win_params(WIN *p_win);
 void create_box(WIN *win, bool flag);
-void print_win_params(WIN *p_win)
-{
-#ifdef _DEBUG
-    mvprintw(25, 0, "%d %d %d %d", p_win->startx, p_win->starty,
-                p_win->width, p_win->height);
-    refresh();
-#endif
-}
+
 #endif /* !MY_H_ */
