@@ -67,4 +67,6 @@ int set_end_game(player_t *player);
 int define_caracter(map_t *map_struct);
 void set_caracter(map_t *map_struct, int i, int j);
 int set_loop(map_t *map_struct, player_t *player, char **argv);
+
+void draw_map(map_t *map_struct, player_t *player, int nbr);
 #endif /*FRAMBUFFER_H_ */

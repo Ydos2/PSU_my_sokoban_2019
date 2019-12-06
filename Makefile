@@ -15,7 +15,8 @@ SRC		=	my_sokoban.c			\
 			map.c					\
 			update.c				\
 			initialise_dir.c		\
-			sokoban_tools.c
+			sokoban_tools.c			\
+			draw.c
 
 SRC_TESTS	=	criterion.c
 
@@ -24,7 +25,8 @@ SRC_O	=	my_sokoban.o			\
 			map.o					\
 			update.o				\
 			initialise_dir.o		\
-			sokoban_tools.o
+			sokoban_tools.o			\
+			draw.o
 
 COMPIL		= gcc $(SRC) -L $(DIRLIB) -lmy -lncurses -o $(EXEC)
 COMPIL_DEBUG		= gcc $(SRC) -L $(DIRLIB) -lmy -lncurses -o $(EXEC) -g3

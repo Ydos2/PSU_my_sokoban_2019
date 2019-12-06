@@ -14,13 +14,7 @@ void update_game(map_t *map_struct, player_t *player, char **argv)
 
     initialise_value(map_struct, player);
     while (map_struct->quit == 0) {
-        if (player->clear_order == 2) {
-            attron(COLOR_PAIR(1));
-                for (int a = 0; a != nbr; a++)
-                mvprintw(a, 0, map_struct->map[a]);
-            attroff(COLOR_PAIR(1));
-            player->clear_order = 0;
-        }
+        draw_map(map_struct, player, nbr);
         get_button(map_struct, player, argv);
         if (player->clear_order == 1) {
             clear();
