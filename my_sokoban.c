@@ -48,12 +48,13 @@ int main(int argc, char **argv)
     map_struct = malloc(sizeof(map_t));
     player = malloc(sizeof(player_t));
     start_map(argv, map_struct);
-    update_game(map_struct, player);
+    if ((define_caracter(map_struct)) == 84) {
+        endwin();
+        return (84);
+    }
+    update_game(map_struct, player, argv);
     close_param(map_struct);
-    if (player->win == 1)
-        return (0);
-    else
-        return (1);
+    set_end_game(player);
 }
 
 void close_param(map_t *map_struct)

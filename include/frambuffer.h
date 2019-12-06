@@ -20,6 +20,7 @@ typedef struct map {
     char car;
     int quit;
     int ch;
+    int result;
 } map_t;
 
 typedef struct player {
@@ -42,10 +43,11 @@ char *my_strdupp(char const *src);
 int my_strlenn(char const *str);
 char *my_strcpyy(char *dest, char const *src);
 
-void update_game(map_t *map_struct, player_t *player);
-void get_button(map_t *map_struct, player_t *player);
+void update_game(map_t *map_struct, player_t *player, char **argv);
+void get_button(map_t *map_struct, player_t *player, char **argv);
 int get_win(map_t *map_struct, player_t *player);
 void set_win(map_t *map_struct, player_t *player, int i, int j);
+void initialise_value(map_t *map_struct, player_t *player);
 
 void move_left(map_t *map_struct, player_t *player);
 void move_right(map_t *map_struct, player_t *player);
@@ -58,4 +60,8 @@ void initialise_right(map_t *map_struct, player_t *player);
 void initialise_up(map_t *map_struct, player_t *player);
 void initialise_down(map_t *map_struct, player_t *player);
 void set_position_player(map_t *map_struct, player_t *player, int i, int j);
+
+int set_end_game(player_t *player);
+int define_caracter(map_t *map_struct);
+void set_caracter(map_t *map_struct, int i, int j);
 #endif /*FRAMBUFFER_H_ */
