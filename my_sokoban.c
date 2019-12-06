@@ -19,16 +19,12 @@ void init_ncurses(void)
     curs_set(0);
 }
 
-int verif_error(int row, int col, int argc, char **argv)
+int verif_error(int argc, char **argv)
 {
     if (argc == 2 && argv[1][0] == '-' && argv[1][1] == 'h') {
         help();
         endwin();
         return (1);
-    }
-    if (row <= 15 || col <= 15) {
-        endwin();
-        return (84);
     }
     return (0);
 }
@@ -41,14 +37,13 @@ int main(int argc, char **argv)
     init_ncurses();
     getmaxyx (stdscr, row, col);
 
-    if (verif_error(row, col, argc, argv) == 84)
-        return (84);
-    if (verif_error(row, col, argc, argv) == 1)
+    if (verif_error(argc, argv) == 1)
         return (0);
     map_struct = malloc(sizeof(map_t));
     player = malloc(sizeof(player_t));
     start_map(argv, map_struct);
-    if ((define_caracter(map_struct)) == 84) {
+    if ((define_caracter(map_struct)) == 84 ||
+        row <= map_struct->k-2 || col <= map_struct->i-2) {
         endwin();
         return (84);
     }

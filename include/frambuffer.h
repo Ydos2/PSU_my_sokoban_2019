@@ -33,7 +33,7 @@ typedef struct player {
 } player_t;
 
 void init_ncurses(void);
-int verif_error(int row, int col, int argc, char **argv);
+int verif_error(int argc, char **argv);
 void close_param(map_t *map_struct);
 void help(void);
 
