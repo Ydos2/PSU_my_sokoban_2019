@@ -10,11 +10,19 @@ DIRLIB		=./lib/
 DIRLIBMY		=./lib/my/
 DIRTEST		=./tests/*.c
 
-SRC		=	my_sokoban.c
+SRC		=	my_sokoban.c			\
+			manage_player.c			\
+			map.c					\
+			update.c				\
+			initialise_dir.c
 
 SRC_TESTS	=	criterion.c
 
-SRC_O	=	my_sokoban.o
+SRC_O	=	my_sokoban.o			\
+			manage_player.o			\
+			map.o					\
+			update.o				\
+			initialise_dir.o
 
 COMPIL		= gcc $(SRC) -L $(DIRLIB) -lmy -lncurses -o $(EXEC)
 COMPIL_DEBUG		= gcc $(SRC) -L $(DIRLIB) -lmy -lncurses -o $(EXEC) -g3
@@ -22,7 +30,7 @@ COMPIL_TEST		= gcc $(SRC) -g3 -L $(DIRLIB) $(DIRTEST) --coverage -lcriterion -lm
 EXEC		= my_sokoban
 EXEC_TEST		= my_tests_sokoban
 RUN_TESTS	=	./$(EXEC_TEST)
-RUN_VALGRIND	=	valgrind --leak-resolution=high --num-callers=40 --track-origins=yes ./$(EXEC)
+RUN_VALGRIND	=	valgrind --leak-resolution=high --num-callers=40 --track-origins=yes ./$(EXEC) map
 
 COVERAGE	=	gcovr --exclude tests/
 COVERAGE_BRANCH		=	gcovr --exclude tests/ -b

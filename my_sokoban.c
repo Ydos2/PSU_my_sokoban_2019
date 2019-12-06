@@ -5,147 +5,71 @@
 ** my_sokoban
 */
 
-#include "./include/my.h"
+#include "include/frambuffer.h"
+#include "include/my.h"
 
-void init_win_params(WIN *p_win)
+void init_ncurses(void)
 {
-    p_win->height = 0;
-    p_win->width = 0;
-    p_win->starty = (LINES - p_win->height)/2;
-    p_win->startx = (COLS - p_win->width)/2;
-
-    p_win->border.tl = 'P';
+    initscr();
+    nodelay(stdscr, TRUE);
+    start_color();
+    keypad(stdscr, TRUE);
+    noecho();
+    init_pair(1, COLOR_CYAN, COLOR_BLACK);
+    curs_set(0);
 }
 
-void create_box(WIN *p_win, bool flag)
+int verif_error(int row, int col, int argc, char **argv)
 {
-    int i, j;
-    int x, y, w, h;
-
-    x = p_win->startx;
-    y = p_win->starty;
-    w = p_win->width;
-    h = p_win->height;
-    if (flag == TRUE) {
-        attron(COLOR_PAIR(2));
-        mvaddch(y, x, p_win->border.tl);
-        attroff(COLOR_PAIR(2));
+    if (argc == 2 && argv[1][0] == '-' && argv[1][1] == 'h') {
+        help();
+        endwin();
+        return (1);
     }
-    else
-        for (j = y; j <= y + h; ++j)
-            for (i = x; i <= x + w; ++i)
-                mvaddch(j, i, ' ');
-    refresh();
+    if (row <= 15 || col <= 15) {
+        endwin();
+        return (84);
+    }
+    return (0);
 }
 
 int main(int argc, char **argv)
 {
-    WIN win;
-    int ch;
     int row, col;
-    int fd;
-    int y0 = 0;
-    int quit = 0;
-    char *tmp = 0;
-    char **map;
-    struct stat staaa;
-    initscr();
+    map_t *map_struct = NULL;
+    player_t *player = NULL;
+    init_ncurses();
     getmaxyx (stdscr, row, col);
-    raw();
-    start_color();
-    cbreak();
-    keypad(stdscr, TRUE);
-    noecho();
 
-    if (argc == 2 && argv[1][0] == '-' && argv[1][1] == 'h') {
-        help();
-        endwin();
-        return (0);
-    }
-    if (row <= 15 || col <= 15 || argc != 2) {
-        endwin();
+    if (verif_error(row, col, argc, argv) == 84)
         return (84);
-    }
+    if (verif_error(row, col, argc, argv) == 1)
+        return (0);
+    map_struct = malloc(sizeof(map_t));
+    player = malloc(sizeof(player_t));
+    start_map(argv, map_struct);
+    update_game(map_struct, player);
+    close_param(map_struct);
+    if (player->win == 1)
+        return (0);
+    else
+        return (1);
+}
 
-    stat(argv[1], &staaa);
-    fd = open(argv[1], O_RDONLY);
-    tmp = malloc(sizeof(char) * staaa.st_size+1);
-    read(fd, tmp, staaa.st_size);
-    tmp[staaa.st_size] = '\0';
-    map = malloc(sizeof(char *) * (staaa.st_size+1));
-    map[y0] = malloc(sizeof(char) * staaa.st_size+1);
-    y0 = y0 + 1;
-    map[y0] = malloc(sizeof(char) * staaa.st_size+1);
-    for (int j = 0; tmp[j] != '\0'; j++)
-        if (tmp[j] == '\n' || tmp[j+1] == '\0') {
-            y0 = y0 + 1;
-            map[y0] = malloc(sizeof(char) * staaa.st_size+1);
-        }
-    int line = 0;
-    int E = 1;
-    map[0][0] = '\n';
-    for (int j = 0; tmp[j] != '\0'; j++, E++) {
-        if (tmp[j] == '\n') {
-            map[line][E] = '\0';
-            line++;
-            E = 0;
-            map[line][E] = '\n';
-        } else
-            map[line][E] = tmp[j];
-    }
-    map[line+1] = NULL;
-    free(tmp);
-    init_pair(1, COLOR_CYAN, COLOR_BLACK);
-    init_pair(2, COLOR_GREEN, COLOR_BLACK);
-    init_win_params(&win);
-    curs_set(0);
-    while (quit == 0) {
-        create_box(&win, TRUE);
-        attron(COLOR_PAIR(1));
-        printw("%d", map[1][E-1]);
-        for (int lin = 0, row = 1; map[lin] != NULL; lin++, row++)
-            mvprintw(LINES/2 + row, (COLS*2), map[lin]);
-        attroff(COLOR_PAIR(1));
-        refresh();
-        while ((ch = getch()) != KEY_BACKSPACE) {
-            switch(ch) {
-            	case KEY_LEFT:
-                    create_box(&win, FALSE);
-                    --win.startx;
-                    create_box(&win, TRUE);
-                    break;
-                case KEY_RIGHT:
-                    create_box(&win, FALSE);
-                    ++win.startx;
-                    create_box(&win, TRUE);
-                    break;
-                case KEY_UP:
-                    create_box(&win, FALSE);
-                    --win.starty;
-                    create_box(&win, TRUE);
-                    break;
-                case KEY_DOWN:
-                    create_box(&win, FALSE);
-                    ++win.starty;
-                    create_box(&win, TRUE);
-                    break;
-                case KEY_BACKSPACE:
-                    quit = 1;
-                    break;
-            }
-        }
-    }
-    free(map);
+void close_param(map_t *map_struct)
+{
+    free(map_struct->map);
     getch();
     endwin();
-    return 0;
 }
 
 void help(void)
 {
-    write(1, "USAGE", 5);
-    write(1, "\t./my_sokoban map", 18);
-    write(1, "DESCRIPTION", 11);
-    write(1, "\tmap file representing the warehouse map, containing '#' for walls,", 69);
-    write(1, "\t\t'P' for the player, 'X' for boxes and '0' for storage locations.", 69);
+    write(1, "USAGE\n", 6);
+    write(1, "\t./my_sokoban map\n", 19);
+    write(1, "DESCRIPTION\n", 12);
+    write(1, "\tmap file representing the warehouse ", 37);
+    write(1, "map, containing '#' for walls,\n", 31);
+    write(1, "\t\t'P' for the player, 'X' for boxes ", 37);
+    write(1, "and '0' for storage locations.\n", 31);
 }

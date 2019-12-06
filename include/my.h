@@ -18,15 +18,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-typedef struct _win_border_struct {
-    chtype	tl;
-}WIN_BORDER;
-
-typedef struct _WIN_struct {
-    int startx, starty;
-    int height, width;
-    WIN_BORDER border;
-}WIN;
 
 void my_putchar(char c);
 int my_isneg(int nb);
@@ -67,9 +58,4 @@ int my_atoi(char *str);
 int my_intlen(int nb);
 int my_put_nbr_base(int nbr, char *base);
 char *my_itoa(int nb);
-
-void help(void);
-void init_win_params(WIN *p_win);
-void create_box(WIN *win, bool flag);
-
 #endif /* !MY_H_ */
