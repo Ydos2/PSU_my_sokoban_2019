@@ -26,7 +26,7 @@ void update_game(map_t *map_struct, player_t *player, char **argv)
             clear();
             player->clear_order = 2;
         }
-        if (player->win == 1)
+        if (player->win == 1 || player->win == 2)
             break;
         refresh();
     }

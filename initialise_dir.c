@@ -15,6 +15,8 @@ void initialise_left(map_t *map_struct, player_t *player)
             map_struct->map[player->y][player->x-2] = 'X';
             if (get_win(map_struct, player) == 1)
                 player->win = 1;
+            else
+                get_defeat(map_struct, player, player->x-2, player->y);
         }
     else
         player->x += 1;
@@ -27,6 +29,8 @@ void initialise_right(map_t *map_struct, player_t *player)
             map_struct->map[player->y][player->x+2] = 'X';
             if (get_win(map_struct, player) == 1)
                 player->win = 1;
+            else
+                get_defeat(map_struct, player, player->x+2, player->y);
         }
     else
         player->x -= 1;
@@ -39,6 +43,8 @@ void initialise_up(map_t *map_struct, player_t *player)
             map_struct->map[player->y-2][player->x] = 'X';
             if (get_win(map_struct, player) == 1)
                 player->win = 1;
+            else
+                get_defeat(map_struct, player, player->x, player->y-2);
         }
     else
         player->y += 1;
@@ -51,6 +57,8 @@ void initialise_down(map_t *map_struct, player_t *player)
             map_struct->map[player->y+2][player->x] = 'X';
             if (get_win(map_struct, player) == 1)
                 player->win = 1;
+            else
+                get_defeat(map_struct, player, player->x, player->y+2);
         }
     else
         player->y -= 1;

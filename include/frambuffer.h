@@ -34,8 +34,10 @@ typedef struct player {
 
 void init_ncurses(void);
 int verif_error(int argc, char **argv);
-void close_param(map_t *map_struct);
+void close_param(map_t *map_struct, player_t *player);
 void help(void);
+void get_defeat(map_t *map_struct, player_t *player,
+    int x_position, int y_position);
 
 void start_map(char **argv, map_t *map_struct);
 void initialise_map(char **argv, map_t *map_struct);
@@ -64,4 +66,5 @@ void set_position_player(map_t *map_struct, player_t *player, int i, int j);
 int set_end_game(player_t *player);
 int define_caracter(map_t *map_struct);
 void set_caracter(map_t *map_struct, int i, int j);
+int set_loop(map_t *map_struct, player_t *player, char **argv);
 #endif /*FRAMBUFFER_H_ */
