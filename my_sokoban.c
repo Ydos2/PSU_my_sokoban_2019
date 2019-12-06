@@ -23,7 +23,6 @@ int verif_error(int argc, char **argv)
 {
     if (argc == 2 && argv[1][0] == '-' && argv[1][1] == 'h') {
         help();
-        endwin();
         return (1);
     }
     return (0);
@@ -31,30 +30,28 @@ int verif_error(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-    int row, col;
     map_t *map_struct = NULL;
     player_t *player = NULL;
-    init_ncurses();
-    getmaxyx (stdscr, row, col);
 
+    if (argc != 2)
+        return (84);
     if (verif_error(argc, argv) == 1)
         return (0);
+    init_ncurses();
     map_struct = malloc(sizeof(map_t));
     player = malloc(sizeof(player_t));
-    start_map(argv, map_struct);
-    if ((define_caracter(map_struct)) == 84 ||
-        row <= map_struct->k-2 || col <= map_struct->i-2) {
-        endwin();
+    if (set_loop(map_struct, player, argv) == 84)
         return (84);
-    }
-    update_game(map_struct, player, argv);
-    close_param(map_struct);
-    set_end_game(player);
+    if (set_end_game(player) == 1)
+        return (1);
+    return (0);
 }
 
-void close_param(map_t *map_struct)
+void close_param(map_t *map_struct, player_t *player)
 {
     free(map_struct->map);
+    free(map_struct);
+    free(player);
     getch();
     endwin();
 }
