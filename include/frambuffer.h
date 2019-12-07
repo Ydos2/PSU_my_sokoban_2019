@@ -30,6 +30,8 @@ typedef struct player {
     int nbr_win;
     int win;
     int place_O;
+    int nbr_X;
+    int nbr_X_actu;
 } player_t;
 
 void init_ncurses(void);
@@ -69,4 +71,7 @@ void set_caracter(map_t *map_struct, int i, int j);
 int set_loop(map_t *map_struct, player_t *player, char **argv);
 
 void draw_map(map_t *map_struct, player_t *player, int nbr);
+
+void set_box(map_t *map_struct, player_t *player, int i, int j);
+void get_box(map_t *map_struct, player_t *player);
 #endif /*FRAMBUFFER_H_ */

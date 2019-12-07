@@ -68,4 +68,5 @@ void initialise_value(map_t *map_struct, player_t *player)
     map_struct->quit = 0;
     player->clear_order = 2;
     player->win = 0;
+    get_box(map_struct, player);
 }

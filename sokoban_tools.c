@@ -64,7 +64,10 @@ void get_defeat(map_t *map_struct, player_t *player,
     if (map_struct->map[y_position][x_position-1] == '#')
         nbr_def_x++;
     if (nbr_def_x >= 1 && nbr_def_y >= 1)
+        player->nbr_X_actu++;
+    if (player->nbr_X_actu == player->nbr_X) {
         player->win = 2;
+    }
 }
 
 int set_loop(map_t *map_struct, player_t *player, char **argv)
