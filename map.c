@@ -27,7 +27,7 @@ void initialise_map(char **argv, map_t *map_struct)
     free(line);
 }
 
-void start_map(char **argv, map_t *map_struct)
+int start_map(char **argv, map_t *map_struct)
 {
     char tmp[300];
 
@@ -35,6 +35,8 @@ void start_map(char **argv, map_t *map_struct)
     map_struct->i = 0;
     map_struct->k = 0;
     map_struct->fd = open(argv[1], O_RDONLY);
+    if (map_struct->fd < 0)
+        return (84);
     while (read(map_struct->fd, &map_struct->car, 1) > 0) {
         map_struct->i++;
         if (map_struct->car == '\n')

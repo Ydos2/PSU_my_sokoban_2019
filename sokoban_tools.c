@@ -75,7 +75,10 @@ int set_loop(map_t *map_struct, player_t *player, char **argv)
     int row, col;
     getmaxyx (stdscr, row, col);
 
-    start_map(argv, map_struct);
+    if (start_map(argv, map_struct) == 84) {
+        close_param(map_struct, player);
+        return (84);
+    }
     if (define_caracter(map_struct) == 84 ||
         row <= map_struct->k-2 || col <= map_struct->i-2) {
         close_param(map_struct, player);

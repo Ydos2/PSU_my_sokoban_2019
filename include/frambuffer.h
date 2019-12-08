@@ -41,7 +41,7 @@ void help(void);
 void get_defeat(map_t *map_struct, player_t *player,
     int x_position, int y_position);
 
-void start_map(char **argv, map_t *map_struct);
+int start_map(char **argv, map_t *map_struct);
 void initialise_map(char **argv, map_t *map_struct);
 char *my_strdupp(char const *src);
 int my_strlenn(char const *str);
