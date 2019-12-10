@@ -10,20 +10,26 @@
 
 void update_game(map_t *map_struct, player_t *player, char **argv)
 {
-    int nbr = map_struct->j - 1;
+    int nbr = map_struct->j - 1, refresh_int = 0;
 
     initialise_value(map_struct, player);
-    while (map_struct->quit == 0) {
+    while (map_struct->quit == 0 || refresh_int == 1) {
         draw_map(map_struct, player, nbr);
         get_button(map_struct, player, argv);
         if (player->clear_order == 1) {
             clear();
             player->clear_order = 2;
         }
-        if (player->win == 1 || player->win == 2)
+        if (refresh_int == 2) {
+            refresh();
             break;
+        }
+        if (player->win == 1 || player->win == 2)
+            refresh_int = 2;
         refresh();
     }
+    draw_map(map_struct, player, nbr);
+    refresh();
 }
 
 void get_button(map_t *map_struct, player_t *player, char **argv)
